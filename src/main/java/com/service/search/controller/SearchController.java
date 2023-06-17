@@ -1,9 +1,5 @@
 package com.service.search.controller;
-
-import com.service.search.enums.ApiType;
-import com.service.search.service.SearchService;
 import com.service.search.service.SearchServiceFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

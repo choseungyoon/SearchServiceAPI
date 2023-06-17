@@ -1,6 +1,5 @@
 package com.service.search.service;
 import com.service.search.enums.ApiType;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
