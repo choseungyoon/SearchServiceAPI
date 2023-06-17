@@ -1,10 +1,11 @@
 package com.service.search.service;
-
-import lombok.RequiredArgsConstructor;
+import com.service.search.enums.ApiType;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
-@Service
-public class SearchService {
+import java.util.List;
 
+
+public interface SearchService {
+    List<String> searchPlace(String keyWord);
+    ApiType getApiType();
 }
