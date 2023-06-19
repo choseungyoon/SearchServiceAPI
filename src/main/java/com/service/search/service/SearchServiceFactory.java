@@ -10,13 +10,13 @@ import java.util.Map;
 @Component
 public class SearchServiceFactory {
 
-    private final Map<ApiType, SearchService> searchServiceMap = new HashMap<>();
+    private final Map<ApiType, SearchApi> searchServiceMap = new HashMap<>();
 
-    public SearchServiceFactory(List<SearchService> searchServices) {
-        searchServices.forEach(s -> searchServiceMap.put(s.getApiType(), s));
+    public SearchServiceFactory(List<SearchApi> searchApis) {
+        searchApis.forEach(s -> searchServiceMap.put(s.getApiType(), s));
     }
 
-    public SearchService getServicePlaceApi(ApiType apiType) {
+    public SearchApi getServicePlaceApi(ApiType apiType) {
         return searchServiceMap.get(apiType);
     }
 

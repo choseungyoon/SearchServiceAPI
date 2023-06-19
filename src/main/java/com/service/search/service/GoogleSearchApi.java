@@ -1,14 +1,15 @@
 package com.service.search.service;
 
 import com.service.search.enums.ApiType;
+import com.service.search.service.response.Place;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class GoogleSearchService implements SearchService{
+public class GoogleSearchApi implements SearchApi {
     @Override
-    public List<String> searchPlace(String keyWord) {
+    public List<Place> searchPlace(String keyWord) {
         return null;
     }
 

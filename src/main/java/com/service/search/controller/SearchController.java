@@ -1,7 +1,9 @@
 package com.service.search.controller;
-import com.service.search.service.SearchServiceFactory;
+import com.service.search.service.response.Place;
+import com.service.search.service.response.SearchService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -9,14 +11,14 @@ import java.util.List;
 @RestController
 public class SearchController {
 
-    final private SearchServiceFactory searchServiceFactory;
+    final private SearchService searchService;
 
-    public SearchController(SearchServiceFactory searchServiceFactory){
-        this.searchServiceFactory = searchServiceFactory;
+    public SearchController(SearchService searchService){
+        this.searchService = searchService;
 
     }
     @GetMapping("/v1/place")
-    public List<String> searchPlace(String keyword){
-        return null;
+    public Mono<List<Place>> searchPlace(String keyword){
+        return this.searchService.searchPlaces(keyword);
     }
 }
