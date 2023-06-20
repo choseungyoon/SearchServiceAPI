@@ -1,24 +1,35 @@
-package com.service.search.service.response;
+package com.service.search.service;
 
 import com.service.search.enums.ApiType;
-import com.service.search.service.SearchServiceFactory;
+import com.service.search.service.response.Place;
 import org.springframework.stereotype.Service;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchService {
 
     private final SearchServiceFactory searchServiceFactory;
 
+    private final ConcurrentHashMap<String, AtomicInteger> queryCountMap;
+
+
     public SearchService(SearchServiceFactory searchServiceFactory) {
         this.searchServiceFactory = searchServiceFactory;
+        queryCountMap = new ConcurrentHashMap<>();
     }
 
     public List<Place> searchPlaces(String query, int size) {
+
+        incrementQueryCount(query);
+
         List<Place> returnValue = new ArrayList<>();
 
         for (ApiType apiType : ApiType.values()) {
@@ -30,6 +41,26 @@ public class SearchService {
         return returnValue;
     }
 
+    public List<Map.Entry<String, Integer>> getTop10Queries() {
+        // Create a list of entries from the queryCountMap
+        List<Map.Entry<String, AtomicInteger>> entries = new ArrayList<>(queryCountMap.entrySet());
+
+        // Sort the entries based on the query count
+        entries.sort(Comparator.comparingInt(entry -> -entry.getValue().get()));
+
+        // Retrieve the top 10 queries (or less if there are fewer than 10)
+        List<Map.Entry<String, Integer>> top10Queries = entries.stream()
+                .limit(10)
+                .map(entry -> Map.entry(entry.getKey(), entry.getValue().get()))
+                .collect(Collectors.toList());
+
+        return top10Queries;
+    }
+
+
+    private void incrementQueryCount(String query) {
+        queryCountMap.computeIfAbsent(query, key -> new AtomicInteger(0)).incrementAndGet();
+    }
 
 
     private List<Place> mergeResults(List<Place> targetResult, List<Place> newResult) {
