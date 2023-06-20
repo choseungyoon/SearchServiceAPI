@@ -6,6 +6,6 @@ import java.util.List;
 
 
 public interface SearchApi {
-    List<Place> searchPlace(String keyWord);
+    List<Place> searchPlace(String query, int size);
     ApiType getApiType();
 }

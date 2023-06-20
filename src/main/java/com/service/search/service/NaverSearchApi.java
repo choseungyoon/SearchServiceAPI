@@ -3,58 +3,47 @@ package com.service.search.service;
 import com.service.search.enums.ApiType;
 import com.service.search.service.response.NaverApiResponse;
 import com.service.search.service.response.Place;
+import lombok.AllArgsConstructor;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import reactor.core.publisher.Mono;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class NaverSearchApi  {
+@AllArgsConstructor
+public class NaverSearchApi  implements SearchApi {
 
-    private final WebClient webClient;
+    private final RestTemplate restTemplate;
 
-    public NaverSearchApi(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("https://openapi.naver.com/v1").build();
+    @Override
+    public List<Place> searchPlace(String query, int size) {
+        String url = "https://openapi.naver.com/v1/search/local.json";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("X-Naver-Client-Id",  "QImLMIExKX0_uMERzAXF");
+        headers.set("X-Naver-Client-Secret",  "73kabI9dw4");
+
+        HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<NaverApiResponse> responseEntity = restTemplate.exchange(
+                url + "?query=" + query + "&display=" + size, HttpMethod.GET, requestEntity, NaverApiResponse.class);
+
+        if (responseEntity.getStatusCode() == HttpStatus.OK) {
+
+            NaverApiResponse kakaoApiResponse = responseEntity.getBody();
+            List<Place> places = new ArrayList<>();
+            kakaoApiResponse.getItems().forEach(document -> {
+                places.add(new Place(document.getTitle(), document.getRoadAddress()));
+            });
+            return places;
+        } else {
+            throw new RuntimeException("API 호출에 실패하였습니다.");
+        }
     }
 
-//    @Override
-//    public List<Place> searchPlace(String keyword) {
-//        List<Place> places = new ArrayList<>();
-//
-//        searchKeyword(keyword)
-//                .subscribe(response -> {
-//                    // API 응답 처리
-//                    List<NaverApiResponse.Item> items = response.getItems();
-//                    for (NaverApiResponse.Item item : items) {
-//                        // 각 문서(document)에 대한 처리 로직 작성
-//                        places.add(new Place(item.getTitle(), item.getRoadAddress()));
-//                        System.out.println(item.getTitle() + " " + item.getRoadAddress());
-//                    }
-//                }, error -> {
-//                    // API 호출 실패 처리
-//                    throw new RuntimeException("API 호출에 실패하였습니다.", error);
-//                });
-//
-//        return places;
-//    }
-
-    public Mono<NaverApiResponse> searchKeyword(String query) {
-        return webClient.get()
-                .uri(uriBuilder -> uriBuilder
-                        .path("/search/local.json")
-                        .queryParam("query", query)
-                        .queryParam("display", 5)
-                        .build())
-                .header("X-Naver-Client-Id",  "QImLMIExKX0_uMERzAXF")
-                .header("X-Naver-Client-Secret",  "73kabI9dw4")
-                .retrieve()
-                .bodyToMono(NaverApiResponse.class);
+    @Override
+    public ApiType getApiType() {
+        return ApiType.NAVER;
     }
-
-//    @Override
-//    public ApiType getApiType() {
-//        return ApiType.NAVER;
-//    }
 }

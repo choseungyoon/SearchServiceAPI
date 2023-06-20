@@ -9,7 +9,7 @@ import java.util.List;
 @Service
 public class GoogleSearchApi implements SearchApi {
     @Override
-    public List<Place> searchPlace(String keyWord) {
+    public List<Place> searchPlace(String keyWord , int size) {
         return null;
     }
 
