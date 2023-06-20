@@ -34,7 +34,7 @@ public class NaverSearchApi  implements SearchApi {
             NaverApiResponse kakaoApiResponse = responseEntity.getBody();
             List<Place> places = new ArrayList<>();
             kakaoApiResponse.getItems().forEach(document -> {
-                places.add(new Place(document.getTitle(), document.getRoadAddress()));
+                places.add(new Place(document.getTitle().replaceAll("<[^>]+>", ""), document.getRoadAddress()));
             });
             return places;
         } else {

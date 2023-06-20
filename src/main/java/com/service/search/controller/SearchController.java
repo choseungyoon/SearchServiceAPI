@@ -1,7 +1,10 @@
 package com.service.search.controller;
+import com.service.search.service.response.Place;
 import com.service.search.service.response.SearchService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
@@ -14,7 +17,7 @@ public class SearchController {
 
     }
     @GetMapping("/v1/place")
-    public void searchPlace(String keyword){
-        this.searchService.searchPlaces(keyword,5);
+    public List<Place> searchPlace(String keyword){
+        return this.searchService.searchPlaces(keyword,5);
     }
 }
