@@ -20,7 +20,7 @@
 **Request**:
 
 ```bash
-curl -X GET "https://limitless-inlet-46201-af0b6f1ae40f.herokuapp.com/v1/place?keyword=bank"
+curl -X GET "https://limitless-inlet-46201-af0b6f1ae40f.herokuapp.com/v1/place?keyword=$(echo -n '카카오뱅크' | curl -Gso /dev/null -w %{url_effective} --data-urlencode @- '' | cut -c 3-)" -H "Accept: application/json"
 ```
 **Response**
 
