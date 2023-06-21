@@ -2,28 +2,28 @@ package com.service.search.service;
 
 import com.service.search.enums.ApiType;
 import com.service.search.dto.Place;
-import com.service.search.dto.QueryCount;
 import org.springframework.stereotype.Service;
 import org.apache.commons.text.similarity.LevenshteinDistance;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.Tuple;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchService {
 
-    private Jedis jedis; // Assume Jedis instance is initialized and connected to Redis
     private final SearchServiceFactory searchServiceFactory;
+    private final ConcurrentHashMap<String, AtomicInteger> queryCountMap;
 
     public SearchService(SearchServiceFactory searchServiceFactory){
         this.searchServiceFactory = searchServiceFactory;
-        jedis = new Jedis();
+        queryCountMap = new ConcurrentHashMap<>();
     }
 
     public List<Place> searchPlaces(String query, int size) {
+        incrementQueryCount(query);
 
-        jedis.zincrby("queryCounts", 1, query);
 
         List<Place> returnValue = new ArrayList<>();
 
@@ -35,25 +35,27 @@ public class SearchService {
         return returnValue;
     }
 
-    public List<QueryCount> getTop10Queries() {
-        List<QueryCount> top10Queries = new ArrayList();
+    public List<Map.Entry<String, Integer>> getTop10Queries() {
+        // Create a list of entries from the queryCountMap
+        List<Map.Entry<String, AtomicInteger>> entries = new ArrayList<>(queryCountMap.entrySet());
 
-        try {
-            // Retrieve the top 10 queries with their counts
-            Set<Tuple> querySet = jedis.zrevrangeWithScores("queryCounts", 0, 9);
+        // Sort the entries based on the query count
+        entries.sort(Comparator.comparingInt(entry -> -entry.getValue().get()));
 
-            // Process the querySet and extract the queries and counts
-            for (Tuple tuple : querySet) {
-                String query = tuple.getElement();
-                double count = tuple.getScore();
-                top10Queries.add(new QueryCount(query, count));
-            }
-        } catch (Exception e) {
-            // Handle exceptions or logging as per your application's error handling strategy
-        }
+        // Retrieve the top 10 queries (or less if there are fewer than 10)
+        List<Map.Entry<String, Integer>> top10Queries = entries.stream()
+                .limit(10)
+                .map(entry -> Map.entry(entry.getKey(), entry.getValue().get()))
+                .collect(Collectors.toList());
 
         return top10Queries;
     }
+
+
+    private void incrementQueryCount(String query) {
+        queryCountMap.computeIfAbsent(query, key -> new AtomicInteger(0)).incrementAndGet();
+    }
+
 
     private List<Place> mergeResults(List<Place> targetResult, List<Place> newResult) {
         List<Place> mergedResults = new ArrayList<>();

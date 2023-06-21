@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -24,7 +25,7 @@ public class SearchController {
     }
 
     @GetMapping("/v1/place/top")
-    public List<QueryCount> topKeyword(){
+    public List<Map.Entry<String, Integer>> topKeyword(){
         return this.searchService.getTop10Queries();
     }
 

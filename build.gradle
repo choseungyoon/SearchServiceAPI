@@ -24,6 +24,8 @@ dependencies {
 	implementation group: 'redis.clients', name: 'jedis', version: '3.7.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compileOnly 'org.projectlombok:lombok'
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-redis
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.3.12.RELEASE'
 	annotationProcessor('org.projectlombok:lombok')
 }
 
