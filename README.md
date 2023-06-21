@@ -8,12 +8,12 @@
 
 ### Search Places
 
-**Endpoint**: `/places`
+**Endpoint**: `/v1/place`
 
 **Method**: `GET`
 
 **Query Parameters**:
-- `query`: The search query string.
+- `keyword`: The search keyword string.
 
 **Example**: `/v1/place?query=카카오뱅크`
 
@@ -75,7 +75,7 @@ The response is returned in JSON format and follows the structure below:
 
 ### Get Top 10 Queries
 
-**Endpoint**: `/top-queries`
+**Endpoint**: `/v1/place/top`
 
 **Method**: `GET`
 
