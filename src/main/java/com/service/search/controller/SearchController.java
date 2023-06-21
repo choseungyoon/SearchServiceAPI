@@ -28,4 +28,8 @@ public class SearchController {
         return this.searchService.getTop10Queries();
     }
 
+    @GetMapping("/api/test")
+    public String test(){
+        return "Hello world";
+    }
 }
