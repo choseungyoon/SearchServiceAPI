@@ -1,4 +1,4 @@
-package com.service.search.service.response;
+package com.service.search.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

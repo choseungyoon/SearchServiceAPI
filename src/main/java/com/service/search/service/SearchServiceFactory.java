@@ -1,6 +1,7 @@
 package com.service.search.service;
 
 import com.service.search.enums.ApiType;
+import com.service.search.service.api.SearchApi;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;

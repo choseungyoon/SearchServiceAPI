@@ -1,9 +1,9 @@
-package com.service.search.service;
+package com.service.search.service.api;
 
 import com.service.search.enums.ApiType;
 import com.service.search.service.response.KakaoApiResponse;
 
-import com.service.search.service.response.Place;
+import com.service.search.dto.Place;
 import lombok.AllArgsConstructor;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;

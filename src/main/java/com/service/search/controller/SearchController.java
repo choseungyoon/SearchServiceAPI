@@ -1,6 +1,6 @@
 package com.service.search.controller;
-import com.service.search.service.QueryCount;
-import com.service.search.service.response.Place;
+import com.service.search.dto.QueryCount;
+import com.service.search.dto.Place;
 import com.service.search.service.SearchService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

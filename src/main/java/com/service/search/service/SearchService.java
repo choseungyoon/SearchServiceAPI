@@ -1,14 +1,14 @@
 package com.service.search.service;
 
 import com.service.search.enums.ApiType;
-import com.service.search.service.response.Place;
+import com.service.search.dto.Place;
+import com.service.search.dto.QueryCount;
 import org.springframework.stereotype.Service;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.Tuple;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 public class SearchService {
