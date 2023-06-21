@@ -24,8 +24,13 @@ dependencies {
 	implementation group: 'redis.clients', name: 'jedis', version: '3.7.0'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor('org.projectlombok:lombok')
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
+}
+
+bootJar {
+	destinationDirectory = file("./target")
 }

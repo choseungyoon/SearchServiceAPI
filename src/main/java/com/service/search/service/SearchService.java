@@ -28,7 +28,6 @@ public class SearchService {
         List<Place> returnValue = new ArrayList<>();
 
         for (ApiType apiType : ApiType.values()) {
-            // apiType 변수를 사용하여 enum의 모든 값에 액세스
             List<Place> resultPlaces = searchServiceFactory.getServicePlaceApi(apiType).searchPlace(query,size);
             returnValue =  mergeResults(returnValue,resultPlaces);
         }

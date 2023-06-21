@@ -10,7 +10,6 @@ public class KakaoApiResponse {
     private Meta meta;
 
     // getter and setter
-
     @Getter
     public static class Document {
         private String address_name;
